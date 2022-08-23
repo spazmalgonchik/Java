@@ -1,13 +1,13 @@
 package ru.prnkstr.addressbook;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 public class GroupCreationTests {
 
@@ -17,20 +17,16 @@ public class GroupCreationTests {
     public void setUp() {
         System.setProperty("webdriver.chrome.driver", "..\\chromedriver.exe");
         wd = new ChromeDriver();
-        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-    }
+        new WebDriverWait(wd, Duration.ofSeconds(10));
 
-    @AfterMethod
-    public void tearDown() {
-        wd.quit();
-    }
-
-    @Test
-    public void groupCreationTests() {
         wd.get("http://localhost/addressbook/");
         wd.findElement(By.name("user")).sendKeys("admin");
         wd.findElement(By.name("pass")).sendKeys("secret");
         wd.findElement(By.xpath("//input[@value]")).click();
+    }
+
+    @Test
+    public void testGroupCreation() {
         wd.findElement(By.linkText("groups")).click();
         wd.findElement(By.name("new")).click();
         wd.findElement(By.name("group_name")).sendKeys("Test_Group_Name_1");
@@ -40,4 +36,10 @@ public class GroupCreationTests {
         wd.findElement(By.name("submit")).click();
         wd.findElement(By.linkText("group page")).click();
     }
+
+    @AfterMethod
+    public void tearDown() {
+        wd.quit();
+    }
+
 }
