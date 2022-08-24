@@ -2,6 +2,8 @@ package ru.prnkstr.addressbook.appmanager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 import ru.prnkstr.addressbook.model.ContactData;
 
 public class ContactHelper extends HelperBase {
@@ -18,19 +20,24 @@ public class ContactHelper extends HelperBase {
         click(By.xpath("//input[@value='Enter'][2]"));
     }
 
-    public void fillContactForm(ContactData contactData) {
-        type(By.name("firstname"), contactData.firstName());
-        type(By.name("middlename"), contactData.middleName());
-        type(By.name("lastname"), contactData.lastName());
-        type(By.name("nickname"), contactData.nickname());
-        type(By.name("title"), contactData.title());
-        type(By.name("company"), contactData.company());
-        type(By.name("address"), contactData.address());
-        type(By.name("home"), contactData.homePhone());
-        type(By.name("mobile"), contactData.mobilePhone());
-        type(By.name("work"), contactData.workPhone());
-        type(By.name("email"), contactData.email());
+    public void fillContactForm(ContactData contactData, boolean creation) {
+        type(By.name("firstname"), contactData.getFirstName());
+        type(By.name("middlename"), contactData.getMiddleName());
+        type(By.name("lastname"), contactData.getLastName());
+        type(By.name("nickname"), contactData.getNickname());
+        type(By.name("title"), contactData.getTitle());
+        type(By.name("company"), contactData.getCompany());
+        type(By.name("address"), contactData.getAddress());
+        type(By.name("home"), contactData.getHomePhone());
+        type(By.name("mobile"), contactData.getMobilePhone());
+        type(By.name("work"), contactData.getWorkPhone());
+        type(By.name("email"), contactData.getEmail());
 
+        if (creation) {
+            new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+        } else {
+            Assert.assertFalse(isElementPresent(By.name("new_group")));
+        }
     }
 
     public void initContactCreation() {
