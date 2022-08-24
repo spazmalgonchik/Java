@@ -1,22 +1,38 @@
 package ru.prnkstr.addressbook.appmanager;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.Browser;
 
 import java.time.Duration;
 
+
 public class ApplicationManager {
-    ChromeDriver wd;
+    WebDriver wd;
     private SessionHelper sessionHelper;
     private NavigationHelper navigationHelper;
     private GroupHelper groupHelper;
     private ContactHelper contactHelper;
+    private final Browser browser;
+
+    public ApplicationManager(Browser browser) {
+        this.browser = browser;
+    }
 
 
     public void init() {
-        System.setProperty("webdriver.chrome.driver", "..\\chromedriver.exe");
-        wd = new ChromeDriver();
-        new WebDriverWait(wd, Duration.ofSeconds(10));
+
+        if (browser.equals(Browser.FIREFOX)) {
+            System.setProperty("webdriver.gecko.driver", "..\\geckodriver.exe");
+            wd = new FirefoxDriver();
+        } else {
+            System.setProperty("webdriver.chrome.driver", "..\\chromedriver.exe");
+            wd = new ChromeDriver();
+        }
+
+
+        wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         wd.get("http://localhost/addressbook/");
         groupHelper = new GroupHelper(wd);
         navigationHelper = new NavigationHelper(wd);

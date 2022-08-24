@@ -3,7 +3,7 @@ package ru.prnkstr.addressbook.tests;
 import org.testng.annotations.Test;
 import ru.prnkstr.addressbook.model.ContactData;
 
-public class ContactCreationTests extends TestBase{
+public class ContactCreationTests extends TestBase {
 
     @Test
     public void testContactCreation() {
