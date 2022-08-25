@@ -34,7 +34,11 @@ public class ContactHelper extends HelperBase {
         type(By.name("email"), contactData.getEmail());
 
         if (creation) {
-            new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+            Select dropDown = new Select(wd.findElement(By.name("new_group")));
+            if (isThereAGroupForContact(dropDown)) {
+                dropDown.selectByVisibleText(contactData.getGroup());
+            }
+            Assert.assertTrue(isElementPresent(By.name("new_group")));
         } else {
             Assert.assertFalse(isElementPresent(By.name("new_group")));
         }
@@ -62,5 +66,27 @@ public class ContactHelper extends HelperBase {
 
     public void submitContactModification() {
         click(By.xpath("//input[@Value='Update'] [1]"));
+    }
+
+    public void createContact(ContactData contact) {
+        initContactCreation();
+        fillContactForm(contact, true);
+        submitContactCreation();
+        returnToHomePage();
+    }
+
+    public void modifyContact(ContactData contact) {
+        initContactModification();
+        fillContactForm(contact, false);
+        submitContactModification();
+        returnToHomePage();
+    }
+
+    public boolean isThereAContact() {
+        return isElementPresent(By.name("selected[]"));
+    }
+
+    public boolean isThereAGroupForContact(Select dropDown) {
+        return (dropDown.getOptions().size() - 1) > 0;
     }
 }
